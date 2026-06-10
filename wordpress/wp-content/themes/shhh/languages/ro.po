@@ -1,0 +1,181 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress.com - Themes - Shhh\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-05-07T01:18:17+00:00\n"
+"PO-Revision-Date: 2025-05-07 01:18:13+0000\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+
+#: patterns/header.php:13
+msgid "•"
+msgstr "•"
+
+#: patterns/header.php
+msgctxt "Pattern title"
+msgid "header"
+msgstr "antet"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Comments"
+msgstr "Comentarii"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent / Four"
+msgstr "Accent/patru"
+
+#: patterns/search.php
+msgctxt "Pattern title"
+msgid "search"
+msgstr "Caută"
+
+#: patterns/index.php
+msgctxt "Pattern title"
+msgid "index"
+msgstr "index"
+
+#: patterns/archive.php:33
+#: patterns/index.php:29
+#: patterns/search.php:33
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Regret, dar nu s-a potrivit nimic cu termenii tăi de căutare. Te rog încearcă din nou cu alte cuvinte cheie."
+
+#: patterns/archive.php
+msgctxt "Pattern title"
+msgid "archive"
+msgstr "arhivă"
+
+#: patterns/404.php
+msgctxt "Pattern title"
+msgid "404"
+msgstr "404"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr "Subsol"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr "Antet"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge"
+msgstr "Imens"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Large"
+msgstr "Foarte mare"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr "Mare"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr "Mediu"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr "Mic"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr "Foarte mic"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "DM Mono"
+msgstr "DM Mono"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent / Three"
+msgstr "Accent/trei"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent / Two"
+msgstr "Accent/doi"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent"
+msgstr "Accent"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Tertiary"
+msgstr "Terță"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr "Secundară"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr "Principală"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "base"
+msgstr "bază"
+
+#: styles/dark.json
+msgctxt "Style variation name"
+msgid "Dark"
+msgstr "Întunecat"
+
+#: patterns/footer.php
+msgctxt "Pattern title"
+msgid "Default footer"
+msgstr "Subsol implicit"
+
+#. Description of the theme
+#: style.css
+msgid "Silence."
+msgstr "Liniște."
+
+#: patterns/footer.php:23
+msgid "Designed with %1$s"
+msgstr "Proiectat cu %1$s"
+
+#. Translators: WordPress link.
+#: patterns/footer.php:21
+msgid "https://wordpress.org"
+msgstr "https://wordpress.org"
+
+#: patterns/archive.php:18
+#: patterns/index.php:14
+#: patterns/search.php:18
+msgid "— read more"
+msgstr "- citește mai mult"
+
+#: patterns/404.php:13
+msgid "⌇⌇ Oops, this page cannot be found.."
+msgstr "⌇⌇ Hopa, această pagină nu poate fi găsită."

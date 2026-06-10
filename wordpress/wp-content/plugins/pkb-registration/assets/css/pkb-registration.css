@@ -1,0 +1,437 @@
+.pkb-account-layout {
+  max-width: 760px;
+}
+
+.pkb-account-section,
+.pkb-account-form {
+  margin: 2rem 0;
+}
+
+.pkb-account-section h2,
+.pkb-account-form h2 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+}
+
+.pkb-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--pkb-border, #d9d6cf);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--pkb-text, #171717);
+  font: inherit;
+  resize: vertical;
+}
+
+.pkb-form input:disabled {
+  background: #f5f4f1;
+  color: var(--pkb-muted, #757575);
+}
+
+.pkb-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 0.85rem;
+}
+
+.pkb-checkbox-label {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.45rem;
+  width: auto;
+  margin: 0 0 1rem;
+  text-align: left;
+}
+
+.pkb-form .pkb-checkbox-label input[type="checkbox"] {
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  flex: 0 0 auto;
+}
+
+.pkb-consent-box {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.2rem 0 1rem;
+  padding: 0.8rem 0.85rem;
+  border: 1px solid var(--pkb-border, #d9d6cf);
+  border-radius: 5px;
+  background: #faf9f6;
+}
+
+.pkb-consent-box .pkb-checkbox-label {
+  margin: 0;
+  color: var(--pkb-text, #171717);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.pkb-consent-box a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pkb-legal-page {
+  max-width: 760px;
+}
+
+.pkb-legal-page h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.05rem;
+}
+
+.pkb-legal-page p,
+.pkb-legal-page li {
+  color: var(--pkb-text, #171717);
+  line-height: 1.75;
+}
+
+.pkb-legal-page ol,
+.pkb-legal-page ul {
+  padding-left: 1.35rem;
+}
+
+.pkb-legal-meta {
+  color: var(--pkb-muted, #757575);
+  font-size: 0.9rem;
+}
+
+.pkb-hp-field {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+.pkb-form > .pkb-auth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  min-height: 0;
+  margin-left: auto;
+  padding: 0.38rem 0.72rem;
+  border: 1px solid color-mix(in srgb, var(--pkb-accent, #2f5f55) 28%, var(--pkb-border, #d9d6cf));
+  border-radius: 5px;
+  background: transparent;
+  color: var(--pkb-text, #171717);
+  font: inherit;
+  font-size: 0.86rem;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.pkb-form > .pkb-auth-button:hover {
+  border-color: var(--pkb-accent, #2f5f55);
+  background: color-mix(in srgb, var(--pkb-accent, #2f5f55) 6%, #fff);
+  color: var(--pkb-accent, #2f5f55);
+}
+
+.pkb-form > .pkb-auth-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--pkb-accent, #2f5f55) 42%, transparent);
+  outline-offset: 3px;
+}
+
+.pkb-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 560px;
+}
+
+.pkb-avatar-row > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.pkb-account-avatar {
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.pkb-avatar-row .pkb-form-note {
+  margin: 0;
+}
+
+.pkb-avatar-form,
+.pkb-avatar-delete-form {
+  margin: 0.75rem 0 0;
+}
+
+.pkb-avatar-delete-form {
+  width: 100%;
+}
+
+.pkb-avatar-form label {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.pkb-avatar-form input[type="file"] {
+  display: block;
+  margin-top: 0.35rem;
+  max-width: 100%;
+}
+
+.pkb-avatar-form button,
+.pkb-avatar-delete-form button {
+  margin-top: 0.65rem;
+}
+
+.pkb-account-layout .pkb-account-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  justify-content: center;
+  min-width: auto;
+  min-height: 0;
+  padding: 0.38rem 0.72rem;
+  border: 1px solid color-mix(in srgb, var(--pkb-accent, #2f5f55) 28%, var(--pkb-border, #d9d6cf));
+  border-radius: 5px;
+  background: transparent;
+  color: var(--pkb-text, #171717);
+  font-weight: 400;
+  font-size: 0.86rem;
+  font-family: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.pkb-account-layout .pkb-account-button:hover {
+  border-color: var(--pkb-accent, #2f5f55);
+  background: color-mix(in srgb, var(--pkb-accent, #2f5f55) 6%, #fff);
+  color: var(--pkb-accent, #2f5f55);
+}
+
+.pkb-account-form > .pkb-account-button,
+.pkb-avatar-delete-form > .pkb-account-button,
+.pkb-account-action-section > .pkb-account-button,
+.pkb-account-action-row > .pkb-account-button {
+  display: flex;
+  width: max-content;
+  margin-left: auto;
+}
+
+.pkb-account-action-section > .pkb-account-button,
+.pkb-account-action-row > .pkb-account-button {
+  margin-top: 0.75rem;
+  text-decoration: none;
+}
+
+.pkb-account-action-section {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 560px;
+}
+
+.pkb-account-action-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.pkb-account-action-row > .pkb-account-button {
+  margin-top: 0;
+}
+
+.pkb-two-factor-status {
+  color: var(--pkb-muted, #757575);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.pkb-two-factor-status-active {
+  color: #2f7d4f;
+}
+
+.pkb-avatar-form > .pkb-account-button {
+  display: flex;
+  width: max-content;
+  margin-left: 0;
+}
+
+.pkb-account-layout .pkb-account-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--pkb-accent, #2f5f55) 45%, transparent);
+  outline-offset: 3px;
+}
+
+.pkb-account-layout .pkb-account-button-primary {
+  border-color: color-mix(in srgb, var(--pkb-accent, #2f5f55) 28%, var(--pkb-border, #d9d6cf));
+  background: transparent;
+  color: var(--pkb-text, #171717);
+  box-shadow: none;
+}
+
+.pkb-account-layout .pkb-account-button-primary:hover {
+  border-color: var(--pkb-accent, #2f5f55);
+  background: color-mix(in srgb, var(--pkb-accent, #2f5f55) 6%, #fff);
+  color: var(--pkb-accent, #2f5f55);
+  box-shadow: none;
+}
+
+.pkb-account-layout .pkb-account-button-secondary {
+  border-color: color-mix(in srgb, var(--pkb-accent, #2f5f55) 28%, var(--pkb-border, #d9d6cf));
+  background: transparent;
+  color: var(--pkb-text, #171717);
+}
+
+.pkb-account-layout .pkb-account-button-secondary:hover {
+  border-color: var(--pkb-accent, #2f5f55);
+  background: color-mix(in srgb, var(--pkb-accent, #2f5f55) 6%, #fff);
+  color: var(--pkb-accent, #2f5f55);
+}
+
+.pkb-account-layout .pkb-account-button-danger {
+  border-color: color-mix(in srgb, #a33a2f 36%, var(--pkb-border, #d9d6cf));
+  background: transparent;
+  color: #8f3027;
+  box-shadow: none;
+}
+
+.pkb-account-layout .pkb-account-button-danger:hover {
+  border-color: #a33a2f;
+  background: color-mix(in srgb, #a33a2f 6%, #fff);
+  color: #842c23;
+  box-shadow: none;
+}
+
+.pkb-account-layout .pkb-account-button-danger-outline {
+  border-color: color-mix(in srgb, #a33a2f 36%, var(--pkb-border, #d9d6cf));
+  background: transparent;
+  color: #8f3027;
+}
+
+.pkb-account-layout .pkb-account-button-danger-outline:hover {
+  border-color: #a33a2f;
+  background: color-mix(in srgb, #a33a2f 6%, #fff);
+  color: #842c23;
+}
+
+.pkb-avatar-form input[type="file"]::file-selector-button {
+  margin-right: 0.7rem;
+  padding: 0.38rem 0.68rem;
+  border: 1px solid var(--pkb-border, #d9d6cf);
+  border-radius: 999px;
+  background: #f5f4f1;
+  color: var(--pkb-text, #171717);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.pkb-avatar-form input[type="file"]::file-selector-button:hover {
+  border-color: #c9c5bc;
+  background: #eceae5;
+}
+
+.pkb-account-layout .pkb-two-factor-form {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 560px;
+}
+
+.pkb-account-layout .pkb-two-factor-form * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.pkb-two-factor-section h2 {
+  margin-top: 0;
+}
+
+.pkb-two-factor-section {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.pkb-two-factor-section fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.pkb-two-factor-section .notice,
+.pkb-two-factor-section ol,
+.pkb-two-factor-section ul,
+.pkb-two-factor-section li,
+.pkb-two-factor-section code,
+.pkb-two-factor-section select,
+.pkb-two-factor-section input[type="text"] {
+  max-width: 100%;
+}
+
+.pkb-two-factor-section code {
+  display: inline-block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.pkb-two-factor-section #two-factor-qr-code {
+  min-width: 0;
+}
+
+.pkb-two-factor-section .form-table {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.pkb-two-factor-section .form-table tbody,
+.pkb-two-factor-section .form-table tr {
+  display: block;
+  max-width: 100%;
+}
+
+.pkb-two-factor-section .form-table th,
+.pkb-two-factor-section .form-table td {
+  display: block;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+  padding: 0.45rem 0;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.pkb-two-factor-section .form-table th {
+  color: var(--pkb-muted, #757575);
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.pkb-two-factor-section .description,
+.pkb-two-factor-section p {
+  color: var(--pkb-muted, #757575);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 640px) {
+  .pkb-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pkb-avatar-row {
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,75 @@
+{
+    "packages": [
+        {
+            "name": "elightup/slim-seo-common",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elightup/slim-seo-common.git",
+                "reference": "7892c84895598d39079cab19e8d7debc76add50c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/7892c84895598d39079cab19e8d7debc76add50c",
+                "reference": "7892c84895598d39079cab19e8d7debc76add50c",
+                "shasum": ""
+            },
+            "time": "2026-04-12T18:10:07+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "eLightUp\\SlimSEO\\Common\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Common code for Slim SEO plugins",
+            "homepage": "https://wpslimseo.com",
+            "support": {
+                "issues": "https://github.com/elightup/slim-seo-common/issues",
+                "source": "https://github.com/elightup/slim-seo-common/tree/1.0.0"
+            },
+            "install-path": "../elightup/slim-seo-common"
+        },
+        {
+            "name": "elightup/slim-twig",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elightup/slim-twig.git",
+                "reference": "72ed78e558406a6d9069802c89cb75b0802781bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/72ed78e558406a6d9069802c89cb75b0802781bd",
+                "reference": "72ed78e558406a6d9069802c89cb75b0802781bd",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.2"
+            },
+            "time": "2025-12-06T01:50:30+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "SlimTwig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "issues": "https://github.com/elightup/slim-twig/issues",
+                "source": "https://github.com/elightup/slim-twig/tree/master"
+            },
+            "install-path": "../elightup/slim-twig"
+        }
+    ],
+    "dev": false,
+    "dev-package-names": []
+}

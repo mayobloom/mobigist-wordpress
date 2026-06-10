@@ -1,0 +1,181 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress.com - Themes - Shhh\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-05-07T01:18:20+00:00\n"
+"PO-Revision-Date: 2025-05-07 01:18:13+0000\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+
+#: patterns/header.php:13
+msgid "•"
+msgstr "•"
+
+#: patterns/header.php
+msgctxt "Pattern title"
+msgid "header"
+msgstr "sidhuvud"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Comments"
+msgstr "Kommentarer"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent / Four"
+msgstr "Accent/fyra"
+
+#: patterns/search.php
+msgctxt "Pattern title"
+msgid "search"
+msgstr "sök"
+
+#: patterns/index.php
+msgctxt "Pattern title"
+msgid "index"
+msgstr "index"
+
+#: patterns/archive.php:33
+#: patterns/index.php:29
+#: patterns/search.php:33
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Inget matchade dina söktermer. Försök igen med några andra nyckelord."
+
+#: patterns/archive.php
+msgctxt "Pattern title"
+msgid "archive"
+msgstr "arkiv"
+
+#: patterns/404.php
+msgctxt "Pattern title"
+msgid "404"
+msgstr "404"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr "Sidfot"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr "Sidhuvud"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge"
+msgstr "Enorm"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Large"
+msgstr "Extra stor"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr "Stor"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr "Medium"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr "Liten"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr "Pytteliten"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "DM Mono"
+msgstr "DM Mono"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent / Three"
+msgstr "Accent/tre"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent / Two"
+msgstr "Accent/två"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent"
+msgstr "Accent"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Tertiary"
+msgstr "Tertiär"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr "Sekundär"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr "Primär"
+
+#: styles/dark.json
+#: theme.json
+msgctxt "Color name"
+msgid "base"
+msgstr "bas"
+
+#: styles/dark.json
+msgctxt "Style variation name"
+msgid "Dark"
+msgstr "Mörk"
+
+#: patterns/footer.php
+msgctxt "Pattern title"
+msgid "Default footer"
+msgstr "Standardsidfot"
+
+#. Description of the theme
+#: style.css
+msgid "Silence."
+msgstr "Tystnad."
+
+#: patterns/footer.php:23
+msgid "Designed with %1$s"
+msgstr "Designad med %1$s"
+
+#. Translators: WordPress link.
+#: patterns/footer.php:21
+msgid "https://wordpress.org"
+msgstr "https://sv.wordpress.org"
+
+#: patterns/archive.php:18
+#: patterns/index.php:14
+#: patterns/search.php:18
+msgid "— read more"
+msgstr "– läs mer"
+
+#: patterns/404.php:13
+msgid "⌇⌇ Oops, this page cannot be found.."
+msgstr "⌇⌇ Hoppsan, denna sida kan inte hittas."

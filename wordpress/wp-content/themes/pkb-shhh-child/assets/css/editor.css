@@ -1,0 +1,28 @@
+body,
+.editor-styles-wrapper,
+.editor-styles-wrapper .is-root-container,
+.editor-styles-wrapper .wp-block,
+.editor-styles-wrapper .block-editor-rich-text__editable,
+.editor-styles-wrapper .wp-block-post-title,
+.editor-styles-wrapper .wp-block-heading,
+.editor-styles-wrapper .wp-block-paragraph,
+.edit-post-visual-editor__post-title-wrapper,
+.block-editor-block-list__layout,
+.block-editor-rich-text__editable {
+  font-family: "Nanum Gothic Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+}
+
+body,
+.editor-styles-wrapper {
+  color: #1d1d1f;
+}
+
+.editor-styles-wrapper strong,
+.editor-styles-wrapper b,
+.editor-styles-wrapper [style*="font-weight: bold"],
+.editor-styles-wrapper [style*="font-weight:bold"],
+.editor-styles-wrapper [style*="font-weight: 700"],
+.editor-styles-wrapper [style*="font-weight:700"] {
+  font-family: "Nanum Gothic Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-weight: 700 !important;
+}
