@@ -124,7 +124,7 @@ For this project, Nginx Proxy Manager is the easier operational choice on a sing
 
 ## Production Compose Separation
 
-Production should use a separate compose override such as `docker-compose.prod.yml`.
+Production should use a separate compose file: `docker-compose.prod.yml`.
 
 The local compose file includes development conveniences:
 
@@ -172,7 +172,22 @@ This keeps real local/production secrets out of Git while preserving example tem
 Example command:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+```
+
+This project uses a standalone production compose file rather than a compose override. That keeps local-only services such as phpMyAdmin and Mailpit out of the production service graph entirely.
+
+The production compose exposes only:
+
+- `80` and `443` for public web traffic through Nginx Proxy Manager
+- `127.0.0.1:81` for the Nginx Proxy Manager admin UI, reachable through an SSH tunnel
+
+WordPress itself is not published directly to the internet in production. In Nginx Proxy Manager, create a Proxy Host that forwards:
+
+```text
+Scheme: http
+Forward Hostname / IP: wordpress
+Forward Port: 80
 ```
 
 ## Lightsail Deployment Flow
@@ -186,7 +201,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 7. Start the reverse proxy.
    - Public firewall rules should allow `80` and `443`.
    - Nginx Proxy Manager admin port `81` should stay private and be accessed through SSH tunneling.
-8. Start WordPress and DB with the production compose configuration.
+8. Start WordPress, DB, and Nginx Proxy Manager with the production compose configuration.
 9. Confirm HTTPS works.
 10. Confirm WordPress `home` and `siteurl` use the HTTPS domain.
 11. Configure AWS SES SMTP values.

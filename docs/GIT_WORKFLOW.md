@@ -266,8 +266,8 @@ cd /home/ubuntu/mobigist
 git pull
 # Pull the latest main branch from GitHub.
 
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
-# Rebuild and restart production containers using the base and production compose files.
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+# Rebuild and restart production containers using the production compose file.
 ```
 
 ## Local Merge Flow
@@ -382,7 +382,7 @@ cd /home/ubuntu/mobigist
 git pull
 # Pull fixed main.
 
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
 # Restart production containers.
 ```
 
