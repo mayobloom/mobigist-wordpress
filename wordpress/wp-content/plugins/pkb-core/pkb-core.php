@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.55
+ * Version: 0.1.56
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.55');
+define('PKB_CORE_VERSION', '0.1.56');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -36,6 +36,7 @@ final class PKB_Core
     private function __construct()
     {
         add_action('init', [$this, 'register_shortcodes']);
+        add_action('init', [$this, 'block_xmlrpc_requests'], 0);
         add_action('init', [$this, 'register_post_meta']);
         add_action('init', [$this, 'handle_comment_forms']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
@@ -75,6 +76,7 @@ final class PKB_Core
         add_filter('wp_mail_from', [$this, 'mail_from']);
         add_filter('wp_mail_from_name', [$this, 'mail_from_name']);
         add_filter('posts_clauses', [$this, 'search_like_sort_clauses'], 10, 2);
+        add_filter('xmlrpc_enabled', '__return_false');
         add_action('pkb_before_user_account_delete', [$this, 'delete_user_owned_data']);
         add_filter('pkb_liked_posts_markup', [$this, 'liked_posts_markup_filter'], 10, 2);
         add_filter('pkb_user_comments_markup', [$this, 'user_comments_markup_filter'], 10, 2);
@@ -94,6 +96,19 @@ final class PKB_Core
     public static function deactivate(): void
     {
         flush_rewrite_rules();
+    }
+
+    public function block_xmlrpc_requests(): void
+    {
+        if (!defined('XMLRPC_REQUEST') || !XMLRPC_REQUEST) {
+            return;
+        }
+
+        status_header(403);
+        nocache_headers();
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'XML-RPC is disabled.';
+        exit;
     }
 
     private static function table(string $name): string
