@@ -90,6 +90,7 @@ services:
     entrypoint: wp
     networks:
       - internal
+      - proxy
 
   proxy:
     image: jc21/nginx-proxy-manager:2
