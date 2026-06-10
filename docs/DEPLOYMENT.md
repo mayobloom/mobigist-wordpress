@@ -175,6 +175,12 @@ Example command:
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
 ```
 
+After the first container start, ensure the EWWW working directory is writable:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml exec wordpress sh -lc 'mkdir -p /var/www/html/wp-content/ewww && chown -R www-data:www-data /var/www/html/wp-content/ewww'
+```
+
 This project uses a standalone production compose file rather than a compose override. That keeps local-only services such as phpMyAdmin and Mailpit out of the production service graph entirely.
 
 The production compose exposes only:

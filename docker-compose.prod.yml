@@ -52,10 +52,6 @@ services:
       - ./wordpress/wp-content/plugins:/var/www/html/wp-content/plugins
       - ./wordpress/wp-content/themes:/var/www/html/wp-content/themes
       - ./wordpress/wp-content/uploads:/var/www/html/wp-content/uploads
-    command: >
-      sh -c "mkdir -p /var/www/html/wp-content/ewww
-      && chown -R www-data:www-data /var/www/html/wp-content/ewww
-      && apache2-foreground"
     networks:
       - internal
       - proxy
