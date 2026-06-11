@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.56
+ * Version: 0.1.57
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.56');
+define('PKB_CORE_VERSION', '0.1.57');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -751,9 +751,9 @@ final class PKB_Core
                         <p class="pkb-search-meta">
                             <?php echo esc_html(get_the_date('M j, Y', $post)); ?>
                             <span aria-hidden="true">·</span>
-                            <?php echo esc_html($this->count_label($this->post_like_count((int) $post->ID), 'Like', 'Likes')); ?>
+                            <?php echo $this->metric_count_markup($this->post_like_count((int) $post->ID), 'like', 'Like', 'Likes'); ?>
                             <span aria-hidden="true">·</span>
-                            <?php echo esc_html($this->count_label((int) get_comments_number($post->ID), 'Comment', 'Comments')); ?>
+                            <?php echo $this->metric_count_markup((int) get_comments_number($post->ID), 'comment', 'Comment', 'Comments'); ?>
                         </p>
                         <?php echo wp_kses_post($this->search_result_terms((int) $post->ID)); ?>
                     </div>
@@ -1340,8 +1340,8 @@ final class PKB_Core
         $terms = is_singular('post') ? '' : $this->post_preview_terms($post_id);
         $meta = sprintf(
             '<span class="pkb-post-date-meta"><span aria-hidden="true">·</span> %s <span aria-hidden="true">·</span> %s%s</span>',
-            esc_html($this->count_label($likes, 'Like', 'Likes')),
-            esc_html($this->count_label($comments, 'Comment', 'Comments')),
+            $this->metric_count_markup($likes, 'like', 'Like', 'Likes'),
+            $this->metric_count_markup($comments, 'comment', 'Comment', 'Comments'),
             $thumbnail
         );
 
@@ -1393,6 +1393,24 @@ final class PKB_Core
     private function count_label(int $count, string $singular, string $plural): string
     {
         return sprintf('%d %s', $count, $count === 1 ? $singular : $plural);
+    }
+
+    private function metric_count_markup(int $count, string $type, string $singular, string $plural): string
+    {
+        $icons = [
+            'like' => '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M20.4 5.1c-1.5-1.6-3.9-1.6-5.4 0L12 8.2 9 5.1c-1.5-1.6-3.9-1.6-5.4 0-1.5 1.6-1.5 4.1 0 5.7L12 19l8.4-8.2c1.5-1.6 1.5-4.1 0-5.7Z"></path></svg>',
+            'comment' => '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M5 5.5h14v9H9.5L5 18.5v-13Z"></path></svg>',
+        ];
+        $icon = $icons[$type] ?? '';
+        $label = $this->count_label($count, $singular, $plural);
+
+        return sprintf(
+            '<span class="pkb-meta-count pkb-meta-count-%s" aria-label="%s">%s<span class="pkb-meta-count-number">%d</span></span>',
+            esc_attr($type),
+            esc_attr($label),
+            $icon,
+            $count
+        );
     }
 
     private function user_liked_post(int $post_id): bool
