@@ -356,6 +356,53 @@ footer .pkb-site-footer-text a:focus {
   color: var(--pkb-accent);
 }
 
+.pkb-back-to-top {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 40;
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--pkb-border) 82%, var(--pkb-text));
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--pkb-text);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  opacity: 0.86;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.pkb-back-to-top:hover,
+.pkb-back-to-top:focus {
+  border-color: var(--pkb-accent);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--pkb-accent);
+  outline: 0;
+  opacity: 1;
+}
+
+.pkb-back-to-top svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 @media (max-width: 782px) {
   body.admin-bar .pkb-sticky-header-bar {
     top: 0;
