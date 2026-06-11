@@ -1,31 +1,70 @@
-.pkb-math-tools-panel .components-tab-panel__tabs {
+.pkb-math-tools-panel .components-panel__body-title {
+  margin-bottom: 6px;
+}
+
+.pkb-math-tools-heading,
+.pkb-live-math-tools-heading {
+  color: #757575;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 0.45rem;
+}
+
+.pkb-math-tools-tabs .components-tab-panel__tabs,
+.pkb-live-math-tools .components-tab-panel__tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 0.55rem;
 }
 
-.pkb-math-tools-panel .components-tab-panel__tabs-item {
+.pkb-math-tools-tabs .components-tab-panel__tabs-item,
+.pkb-live-math-tools .components-tab-panel__tabs-item {
   border-radius: 4px;
-  height: 32px;
-  padding: 0 8px;
+  height: 26px;
+  min-height: 26px;
+  padding: 0 6px;
 }
 
-.pkb-math-tools-panel .components-tab-panel__tabs-item.is-active {
+.pkb-math-tools-tabs .components-tab-panel__tabs-item.is-active,
+.pkb-live-math-tools .components-tab-panel__tabs-item.is-active {
   background: #f0eee8;
+}
+
+.pkb-math-tools-button.components-button:focus,
+.pkb-math-tools-button.components-button:focus-visible,
+.pkb-math-tools-tabs .components-tab-panel__tabs-item:focus,
+.pkb-math-tools-tabs .components-tab-panel__tabs-item:focus-visible,
+.pkb-live-math-tools .components-tab-panel__tabs-item:focus,
+.pkb-live-math-tools .components-tab-panel__tabs-item:focus-visible {
+  background: #e6f4ff;
+  color: #1f2933;
+  box-shadow: 0 0 0 1px #9ed8ff;
+  outline: none;
 }
 
 .pkb-math-tools-grid {
   display: grid;
-  gap: 6px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.pkb-live-math-tools .pkb-math-tools-grid {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
 }
 
 .pkb-math-tools-button.components-button {
   justify-content: center;
+  min-height: 26px;
   min-width: 0;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding: 0 3px;
+}
+
+.pkb-math-tools-empty {
+  color: #757575;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 0.35rem 0;
 }
 
 .pkb-math-tools-section {
@@ -34,27 +73,167 @@
   padding-top: 12px;
 }
 
-.pkb-math-tools-heading {
-  color: #757575;
-  font-size: 12px;
-  margin-bottom: 6px;
-}
-
-.pkb-math-tools-example.components-button {
+.pkb-math-tools-example {
   display: block;
-  height: auto;
-  justify-content: flex-start;
   margin-bottom: 4px;
   text-align: left;
   width: 100%;
 }
 
-.components-popover:has(.wp-block-math__textarea-control) .components-popover__content {
-  max-width: min(90vw, 960px);
+.pkb-math-tools-examples {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
 }
 
-.wp-block-math__textarea-control textarea {
-  max-width: min(86vw, 900px);
-  min-width: 300px;
-  resize: both;
+.pkb-math-tools-popover-controls {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  margin: 4px 0 0;
+  width: 100%;
+}
+
+.pkb-math-tools-extended-button.components-button {
+  border-radius: 4px;
+  font-size: 12px;
+  min-height: 26px;
+  padding: 0 8px;
+}
+
+.pkb-live-math-modal .components-modal__content {
+  width: min(920px, calc(100vw - 48px));
+  font-size: 12px;
+  overflow: visible;
+}
+
+.pkb-live-math-modal-body {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pkb-live-math-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 0.45rem;
+}
+
+.pkb-live-math-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.pkb-live-math-actions .components-button {
+  font-size: 12px;
+  min-height: 26px;
+  padding: 0 8px;
+}
+
+.pkb-live-math-field-wrap {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 320px;
+  min-height: 180px;
+  max-width: 100%;
+  padding: 0.55rem;
+  border: 1px solid #dedbd4;
+  border-radius: 4px;
+  background: #fff;
+  overflow: visible;
+  cursor: text;
+}
+
+.pkb-live-math-field {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-height: 156px;
+  border: 0;
+  background: transparent;
+  color: #2d2a26;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  outline: none;
+  pointer-events: auto;
+  user-select: text;
+  --contains-highlight-background-color: #e6f4ff;
+  --highlight-text: rgba(230, 244, 255, 0.95);
+  --selection-background-color: #d7efff;
+  --selection-color: #1f2933;
+}
+
+.pkb-live-math-code-editor {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-height: 180px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #dedbd4;
+  border-radius: 4px;
+  background: #fff;
+  color: #2d2a26;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+
+.pkb-live-math-code-editor:focus {
+  border-color: #9ed8ff;
+  box-shadow: 0 0 0 1px #9ed8ff;
+}
+
+.pkb-live-math-tools {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ebe8e1;
+  border-radius: 4px;
+  background: #fbfaf7;
+}
+
+#mathlive-suggestion-popover,
+.ML__popover,
+[class^="ML__popover"],
+[class*=" ML__popover"],
+.ML__keyboard,
+.ML__keyboard-sink {
+  z-index: 1000000 !important;
+}
+
+#mathlive-suggestion-popover .ML__popover__current,
+.ML__popover .ML__popover__current {
+  background: #e6f4ff !important;
+  color: #1f2933 !important;
+}
+
+.pkb-live-math-field::part(menu-toggle),
+.pkb-live-math-field::part(virtual-keyboard-toggle) {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  .pkb-live-math-modal .components-modal__content {
+    width: calc(100vw - 24px);
+  }
+
+  .pkb-live-math-field-wrap,
+  .pkb-live-math-code-editor {
+    min-width: 0;
+  }
+
+  .pkb-live-math-tools .pkb-math-tools-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pkb-math-tools-examples {
+    grid-template-columns: 1fr;
+  }
 }

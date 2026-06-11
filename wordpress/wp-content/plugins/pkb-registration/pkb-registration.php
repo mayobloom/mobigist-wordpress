@@ -1063,6 +1063,10 @@ HTML;
 
     public function ensure_staff_two_factor_after_totp_rest($response, $handler, WP_REST_Request $request)
     {
+        if (!class_exists('Two_Factor_Core')) {
+            return $response;
+        }
+
         $allowed_routes = [
             '/' . Two_Factor_Core::REST_NAMESPACE . '/totp',
             '/' . Two_Factor_Core::REST_NAMESPACE . '/generate-backup-codes',
