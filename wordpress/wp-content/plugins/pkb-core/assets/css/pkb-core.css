@@ -588,6 +588,10 @@
   color: #333330;
 }
 
+.pkb-graph {
+  position: relative;
+}
+
 .pkb-graph svg {
   display: block;
   width: 100%;
@@ -596,6 +600,56 @@
   cursor: grab;
   touch-action: none;
   user-select: none;
+}
+
+.pkb-graph.is-locked svg {
+  cursor: default;
+  filter: blur(1px);
+  opacity: 0.72;
+  touch-action: auto;
+}
+
+.pkb-graph-lock-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  padding: 3.35rem 1rem 0.85rem;
+  border: 0;
+  background: rgba(255, 255, 255, 0.34);
+  color: #5f5f5f;
+  font: inherit;
+  font-size: 0.84rem;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+}
+
+.pkb-graph.is-locked .pkb-graph-lock-overlay {
+  display: flex;
+}
+
+.pkb-graph-lock-overlay:hover,
+.pkb-graph-lock-overlay:focus {
+  background: rgba(255, 255, 255, 0.48);
+  color: #2f5f55;
+  outline: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (hover: none) {
+  .pkb-graph-lock-overlay {
+    background: rgba(255, 255, 255, 0.48);
+    color: #2f5f55;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
 }
 
 .pkb-graph svg.is-dragging {

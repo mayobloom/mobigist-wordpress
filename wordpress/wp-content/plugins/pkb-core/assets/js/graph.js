@@ -78,6 +78,20 @@
     return controls;
   }
 
+  function createInteractionOverlay(unlock) {
+    const overlay = document.createElement('button');
+    overlay.type = 'button';
+    overlay.className = 'pkb-graph-lock-overlay';
+    overlay.textContent = '클릭 또는 탭하여 연결된 글 확인';
+    overlay.setAttribute('aria-label', '그래프 조작 활성화');
+    overlay.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      unlock();
+    });
+    return overlay;
+  }
+
   function renderGraph(container, graph) {
     container.innerHTML = '';
     if (!graph.nodes || !graph.nodes.length) {
@@ -116,8 +130,29 @@
       startX: 0,
       startY: 0,
       baseX: 0,
-      baseY: 0
+      baseY: 0,
+      locked: true
     };
+
+    container.classList.add('is-locked');
+
+    function lockInteraction() {
+      if (state.dragging) {
+        state.dragging = false;
+        state.pointerId = null;
+        svg.classList.remove('is-dragging');
+      }
+      state.locked = true;
+      container.classList.add('is-locked');
+      container.classList.remove('is-active');
+    }
+
+    function unlockInteraction() {
+      state.locked = false;
+      container.classList.remove('is-locked');
+      container.classList.add('is-active');
+      svg.focus({ preventScroll: true });
+    }
 
     function bounds(scale = state.scale) {
       const extraX = width * 0.18;
@@ -267,6 +302,7 @@
       zoomOut: () => setScale(state.scale / 1.18)
     }));
     container.appendChild(svg);
+    container.appendChild(createInteractionOverlay(unlockInteraction));
     apply();
 
     function ticked() {
@@ -314,6 +350,7 @@
     }
 
     svg.addEventListener('wheel', (event) => {
+      if (state.locked) return;
       event.preventDefault();
       const rect = svg.getBoundingClientRect();
       const factor = event.deltaY < 0 ? 1.08 : 0.92;
@@ -321,6 +358,7 @@
     }, { passive: false });
 
     svg.addEventListener('pointerdown', (event) => {
+      if (state.locked) return;
       const nodeEl = event.target.closest ? event.target.closest('.pkb-graph-node') : null;
       state.dragging = true;
       state.moved = false;
@@ -335,6 +373,7 @@
     });
 
     svg.addEventListener('pointermove', (event) => {
+      if (state.locked) return;
       if (!state.dragging || state.pointerId !== event.pointerId) return;
       const dx = event.clientX - state.startX;
       const dy = event.clientY - state.startY;
@@ -346,6 +385,7 @@
     });
 
     function endDrag(event) {
+      if (state.locked) return;
       if (!state.dragging || state.pointerId !== event.pointerId) return;
       state.dragging = false;
       state.pointerId = null;
@@ -371,6 +411,16 @@
       state.pointerId = null;
       svg.classList.remove('is-dragging');
       settle();
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+      if (state.locked || container.contains(event.target)) return;
+      lockInteraction();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (state.locked || event.key !== 'Escape') return;
+      lockInteraction();
     });
   }
 
