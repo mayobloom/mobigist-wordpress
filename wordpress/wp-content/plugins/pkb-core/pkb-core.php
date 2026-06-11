@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.61
+ * Version: 0.1.64
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.61');
+define('PKB_CORE_VERSION', '0.1.64');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -1854,11 +1854,20 @@ final class PKB_Core
             if (!isset($allowed[$post_id])) {
                 continue;
             }
+            $tags = get_the_terms($post_id, 'post_tag');
+            $tag_names = [];
+            if (!is_wp_error($tags) && is_array($tags)) {
+                foreach (array_slice($tags, 0, 2) as $tag) {
+                    $tag_names[] = $tag->name;
+                }
+            }
             $nodes[] = [
                 'id' => $post_id,
                 'title' => get_the_title($post_id),
                 'url' => get_permalink($post_id),
                 'depth' => $root ? $this->node_distance($root, $post_id, $edges, $depth) : 0,
+                'tags' => $tag_names,
+                'hasMoreTags' => is_array($tags) && count($tags) > 2,
             ];
         }
 

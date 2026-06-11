@@ -57,11 +57,23 @@
     return value;
   }
 
+  function pointerDistance(a, b) {
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+
+  function pointerCenter(a, b) {
+    return {
+      x: (a.x + b.x) / 2,
+      y: (a.y + b.y) / 2
+    };
+  }
+
   function createControls(actions) {
     const controls = document.createElement('div');
     controls.className = 'pkb-graph-controls';
 
     [
+      ['태그 표시', '#', actions.toggleTags],
       ['화면 초기화', '⛶', actions.reset],
       ['확대', '+', actions.zoomIn],
       ['축소', '-', actions.zoomOut]
@@ -71,7 +83,7 @@
       button.setAttribute('aria-label', label);
       button.title = label;
       button.textContent = text;
-      button.addEventListener('click', action);
+      button.addEventListener('click', () => action(button));
       controls.appendChild(button);
     });
 
@@ -108,7 +120,15 @@
       ...node,
       degree: degrees.get(Number(node.id)) || 0,
       radius: Math.min(14, 6 + Math.sqrt(degrees.get(Number(node.id)) || 0) * 2.2),
-      labelWidth: Math.min(220, Math.max(56, String(node.title || '').length * 8))
+      labelWidth: Math.min(220, Math.max(56, String(node.title || '').length * 8)),
+      tagLabel: Array.isArray(node.tags) && node.tags.length
+        ? node.tags.map((tag) => `#${tag}`).join(' ') + (node.hasMoreTags ? ' ...' : '')
+        : '',
+      tagLabelWidth: Math.min(220, Math.max(0, String(
+        Array.isArray(node.tags) && node.tags.length
+          ? node.tags.map((tag) => `#${tag}`).join(' ') + (node.hasMoreTags ? ' ...' : '')
+          : ''
+      ).length * 7))
     }));
     const links = graph.edges
       .filter((edge) => degrees.has(Number(edge.source)) && degrees.has(Number(edge.target)))
@@ -131,17 +151,30 @@
       startY: 0,
       baseX: 0,
       baseY: 0,
-      locked: true
+      locked: true,
+      pinching: false,
+      pinchStartDistance: 0,
+      pinchStartScale: 1,
+      pinchLastCenter: null,
+      forceFrame: null,
+      forceTimer: null,
+      showTags: false
     };
+    const activePointers = new Map();
+    let simulation = null;
+    let collisionForce = null;
 
     container.classList.add('is-locked');
 
     function lockInteraction() {
-      if (state.dragging) {
+      if (state.dragging || state.pinching) {
         state.dragging = false;
+        state.pinching = false;
         state.pointerId = null;
         svg.classList.remove('is-dragging');
       }
+      activePointers.clear();
+      state.pinching = false;
       state.locked = true;
       container.classList.add('is-locked');
       container.classList.remove('is-active');
@@ -155,8 +188,10 @@
     }
 
     function bounds(scale = state.scale) {
-      const extraX = width * 0.18;
-      const extraY = height * 0.18;
+      const compact = width <= 560;
+      const tagExtra = state.showTags ? 0.16 : 0;
+      const extraX = width * (compact ? 0.52 + tagExtra : 0.24 + tagExtra * 0.5);
+      const extraY = height * (compact ? 0.32 : 0.22);
       return {
         minX: width - width * scale - extraX,
         maxX: extraX,
@@ -167,6 +202,112 @@
 
     function apply() {
       viewport.setAttribute('transform', `translate(${state.x} ${state.y}) scale(${state.scale})`);
+    }
+
+    function graphCenter() {
+      return {
+        x: (width / 2 - state.x) / state.scale,
+        y: (height / 2 - state.y) / state.scale
+      };
+    }
+
+    function collisionRadius(node) {
+      const labelWidth = Math.max(node.labelWidth, state.showTags ? node.tagLabelWidth : 0);
+      const labelHeight = state.showTags && node.tagLabel ? 18 : 0;
+      const base = node.radius + labelWidth * 0.45 + labelHeight + 28;
+      const zoomWeight = clamp((state.scale - 1) / 1.8, 0, 1);
+      if (!zoomWeight) return base;
+
+      const center = graphCenter();
+      const distance = Math.hypot((node.x || 0) - center.x, (node.y || 0) - center.y);
+      const focusRange = Math.max(120, Math.min(width, height) * 0.42 / state.scale);
+      const focusWeight = clamp(1 - distance / focusRange, 0, 1);
+      return base * (1 + 0.18 * zoomWeight * focusWeight);
+    }
+
+    function labelBounds(node) {
+      const gap = node.radius + 8;
+      const labelWidth = Math.max(node.labelWidth, state.showTags ? node.tagLabelWidth : 0);
+      const top = state.showTags && node.tagLabel ? node.y - 8 : node.y - 8;
+      const bottom = state.showTags && node.tagLabel ? node.y + 24 : node.y + 8;
+      if (node.x > width / 2) {
+        return {
+          left: node.x - gap - labelWidth,
+          right: node.x - gap,
+          top,
+          bottom
+        };
+      }
+
+      return {
+        left: node.x + gap,
+        right: node.x + gap + labelWidth,
+        top,
+        bottom
+      };
+    }
+
+    function labelSeparationForce() {
+      let forceNodes = [];
+
+      function force(alpha) {
+        const zoomWeight = clamp((state.scale - 1) / 1.8, 0, 1);
+        const activityWeight = 0.3 + 0.7 * zoomWeight;
+
+        const center = graphCenter();
+        const focusRange = Math.max(120, Math.min(width, height) * 0.48 / state.scale);
+
+        for (let i = 0; i < forceNodes.length; i += 1) {
+          const a = forceNodes[i];
+          const aBounds = labelBounds(a);
+
+          for (let j = i + 1; j < forceNodes.length; j += 1) {
+            const b = forceNodes[j];
+            const bBounds = labelBounds(b);
+            const overlapsX = aBounds.left < bBounds.right && aBounds.right > bBounds.left;
+            if (!overlapsX) continue;
+
+            const overlapX = Math.min(aBounds.right, bBounds.right) - Math.max(aBounds.left, bBounds.left);
+            const overlapY = Math.min(aBounds.bottom, bBounds.bottom) - Math.max(aBounds.top, bBounds.top) + 6;
+            if (overlapY <= 0) continue;
+
+            const aFocus = clamp(1 - Math.hypot((a.x || 0) - center.x, (a.y || 0) - center.y) / focusRange, 0, 1);
+            const bFocus = clamp(1 - Math.hypot((b.x || 0) - center.x, (b.y || 0) - center.y) / focusRange, 0, 1);
+            const focusWeight = 0.35 + 0.65 * Math.max(aFocus, bFocus);
+
+            const directionX = ((b.x || 0) - (a.x || 0)) === 0 ? (i % 2 === 0 ? 1 : -1) : Math.sign((b.x || 0) - (a.x || 0));
+            const dy = (b.y || 0) - (a.y || 0);
+            const directionY = dy === 0 ? (i % 2 === 0 ? 1 : -1) : Math.sign(dy);
+            const pushX = overlapX * 0.164 * activityWeight * focusWeight * alpha;
+            const pushY = overlapY * 0.164 * activityWeight * focusWeight * alpha;
+            a.vx -= directionX * pushX;
+            b.vx += directionX * pushX;
+            a.vy -= directionY * pushY;
+            b.vy += directionY * pushY;
+          }
+        }
+      }
+
+      force.initialize = function (nextNodes) {
+        forceNodes = nextNodes;
+      };
+
+      return force;
+    }
+
+    function warmForces() {
+      if (!simulation || !collisionForce) return;
+      collisionForce.radius(collisionRadius);
+      if (state.forceFrame) return;
+
+      state.forceFrame = requestAnimationFrame(() => {
+        state.forceFrame = null;
+        simulation.alphaTarget(0.025).restart();
+        window.clearTimeout(state.forceTimer);
+        state.forceTimer = window.setTimeout(() => {
+          simulation.alphaTarget(0);
+        }, 260);
+      });
     }
 
     function clearHover() {
@@ -245,6 +386,7 @@
       state.x = clamp(state.x, b.minX, b.maxX);
       state.y = clamp(state.y, b.minY, b.maxY);
       apply();
+      warmForces();
     }
 
     function reset() {
@@ -252,6 +394,7 @@
       state.y = 0;
       state.scale = 1;
       apply();
+      warmForces();
     }
 
     const lineEls = links.map((edge) => {
@@ -287,16 +430,38 @@
         opacity: opacityFor(node.depth, window.PKB.graph.nodeOpacity, 0.8)
       });
 
+      const tagLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      tagLabel.classList.add('pkb-graph-tag-label');
+      tagLabel.textContent = node.tagLabel;
+      attrs(tagLabel, {
+        y: 15,
+        fill: '#767676',
+        opacity: 0
+      });
+
       group.appendChild(circle);
       group.appendChild(label);
+      group.appendChild(tagLabel);
       viewport.appendChild(group);
       group.addEventListener('mouseenter', () => setHover(node));
       group.addEventListener('mouseleave', clearHover);
-      return { node, group, circle, label };
+      return { node, group, circle, label, tagLabel };
     });
 
     svg.appendChild(viewport);
     container.appendChild(createControls({
+      toggleTags: (button) => {
+        state.showTags = !state.showTags;
+        container.classList.toggle('is-showing-tags', state.showTags);
+        if (button) {
+          button.classList.toggle('is-active', state.showTags);
+          button.setAttribute('aria-pressed', state.showTags ? 'true' : 'false');
+        }
+        nodeEls.forEach(({ tagLabel }) => {
+          tagLabel.setAttribute('opacity', state.showTags ? '0.82' : '0');
+        });
+        warmForces();
+      },
       reset,
       zoomIn: () => setScale(state.scale * 1.18),
       zoomOut: () => setScale(state.scale / 1.18)
@@ -322,16 +487,22 @@
       nodeEls.forEach(({ node, group }) => {
         const labelOnLeft = node.x > width / 2;
         const label = group.querySelector('text');
+        const tagLabel = group.querySelector('.pkb-graph-tag-label');
         if (label) {
           label.setAttribute('x', labelOnLeft ? -(node.radius + 8) : node.radius + 8);
           label.setAttribute('text-anchor', labelOnLeft ? 'end' : 'start');
+        }
+        if (tagLabel) {
+          tagLabel.setAttribute('x', labelOnLeft ? -(node.radius + 8) : node.radius + 8);
+          tagLabel.setAttribute('text-anchor', labelOnLeft ? 'end' : 'start');
         }
         group.setAttribute('transform', `translate(${node.x} ${node.y})`);
       });
     }
 
     if (window.d3 && window.d3.forceSimulation) {
-      window.d3.forceSimulation(nodes)
+      collisionForce = window.d3.forceCollide().radius(collisionRadius).strength(0.9);
+      simulation = window.d3.forceSimulation(nodes)
         .force('link', window.d3.forceLink(links).id((node) => Number(node.id)).distance((link) => {
           const sourceDegree = link.source.degree || 1;
           const targetDegree = link.target.degree || 1;
@@ -339,7 +510,8 @@
         }).strength(0.55))
         .force('charge', window.d3.forceManyBody().strength((node) => -260 - node.degree * 70))
         .force('center', window.d3.forceCenter(width / 2, height / 2).strength(0.08))
-        .force('collision', window.d3.forceCollide().radius((node) => node.radius + node.labelWidth * 0.45 + 28).strength(0.95))
+        .force('collision', collisionForce)
+        .force('labelSeparation', labelSeparationForce())
         .force('x', window.d3.forceX(width / 2).strength(0.035))
         .force('y', window.d3.forceY(height / 2).strength(0.035))
         .alpha(1)
@@ -357,8 +529,62 @@
       setScale(state.scale * factor, event.clientX - rect.left, event.clientY - rect.top);
     }, { passive: false });
 
+    function pointerFromEvent(event) {
+      const rect = svg.getBoundingClientRect();
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
+
+    function pinchPointers() {
+      return Array.from(activePointers.values()).slice(0, 2);
+    }
+
+    function startPinch() {
+      const points = pinchPointers();
+      if (points.length < 2) return;
+      state.pinching = true;
+      state.dragging = false;
+      state.downNode = null;
+      state.pointerId = null;
+      state.moved = true;
+      state.pinchStartDistance = Math.max(1, pointerDistance(points[0], points[1]));
+      state.pinchStartScale = state.scale;
+      state.pinchLastCenter = pointerCenter(points[0], points[1]);
+      svg.classList.add('is-dragging');
+    }
+
+    function updatePinch() {
+      const points = pinchPointers();
+      if (!state.pinching || points.length < 2) return;
+      const center = pointerCenter(points[0], points[1]);
+      const distance = Math.max(1, pointerDistance(points[0], points[1]));
+      setScale(state.pinchStartScale * (distance / state.pinchStartDistance), center.x, center.y);
+
+      if (state.pinchLastCenter) {
+        const dx = center.x - state.pinchLastCenter.x;
+        const dy = center.y - state.pinchLastCenter.y;
+        const b = bounds();
+        state.x = clamp(state.x + dx, b.minX, b.maxX);
+        state.y = clamp(state.y + dy, b.minY, b.maxY);
+        apply();
+      }
+
+      state.pinchLastCenter = center;
+      warmForces();
+    }
+
     svg.addEventListener('pointerdown', (event) => {
       if (state.locked) return;
+      activePointers.set(event.pointerId, pointerFromEvent(event));
+      if (activePointers.size >= 2) {
+        event.preventDefault();
+        startPinch();
+        svg.setPointerCapture(event.pointerId);
+        return;
+      }
+
       const nodeEl = event.target.closest ? event.target.closest('.pkb-graph-node') : null;
       state.dragging = true;
       state.moved = false;
@@ -374,6 +600,15 @@
 
     svg.addEventListener('pointermove', (event) => {
       if (state.locked) return;
+      if (activePointers.has(event.pointerId)) {
+        activePointers.set(event.pointerId, pointerFromEvent(event));
+      }
+      if (state.pinching) {
+        event.preventDefault();
+        updatePinch();
+        return;
+      }
+
       if (!state.dragging || state.pointerId !== event.pointerId) return;
       const dx = event.clientX - state.startX;
       const dy = event.clientY - state.startY;
@@ -382,10 +617,26 @@
       state.x = resistant(state.baseX + dx, b.minX, b.maxX);
       state.y = resistant(state.baseY + dy, b.minY, b.maxY);
       apply();
+      warmForces();
     });
 
     function endDrag(event) {
       if (state.locked) return;
+      activePointers.delete(event.pointerId);
+      if (state.pinching) {
+        if (activePointers.size >= 2) {
+          startPinch();
+          return;
+        }
+        state.pinching = false;
+        state.dragging = false;
+        state.pointerId = null;
+        state.downNode = null;
+        svg.classList.remove('is-dragging');
+        settle();
+        return;
+      }
+
       if (!state.dragging || state.pointerId !== event.pointerId) return;
       state.dragging = false;
       state.pointerId = null;
@@ -406,7 +657,9 @@
     svg.addEventListener('pointerup', endDrag);
     svg.addEventListener('pointercancel', endDrag);
     svg.addEventListener('lostpointercapture', () => {
-      if (!state.dragging) return;
+      if (!state.dragging && !state.pinching) return;
+      activePointers.clear();
+      state.pinching = false;
       state.dragging = false;
       state.pointerId = null;
       svg.classList.remove('is-dragging');

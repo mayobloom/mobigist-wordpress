@@ -690,6 +690,13 @@
   dominant-baseline: middle;
 }
 
+.pkb-graph-tag-label {
+  cursor: pointer;
+  font-size: 10px;
+  dominant-baseline: middle;
+  transition: opacity 140ms ease;
+}
+
 .pkb-graph-empty {
   padding: 2rem 0;
   color: #767676;
