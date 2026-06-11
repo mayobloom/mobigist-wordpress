@@ -256,6 +256,13 @@
 }
 
 @media (max-width: 700px) {
+  .pkb-search-page {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 1rem;
+  }
+
   .pkb-search-form {
     grid-template-columns: 1fr;
   }

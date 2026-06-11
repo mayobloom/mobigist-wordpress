@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Registration
  * Description: Registration, email verification, login, and frontend account management for PKB.
- * Version: 0.2.34
+ * Version: 0.2.35
  * Author: PKB
  * Text Domain: pkb-registration
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_REGISTRATION_VERSION', '0.2.34');
+define('PKB_REGISTRATION_VERSION', '0.2.35');
 define('PKB_REGISTRATION_FILE', __FILE__);
 define('PKB_REGISTRATION_DIR', plugin_dir_path(__FILE__));
 define('PKB_REGISTRATION_URL', plugin_dir_url(__FILE__));
