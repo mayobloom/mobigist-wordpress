@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.58
+ * Version: 0.1.59
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.58');
+define('PKB_CORE_VERSION', '0.1.59');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -604,13 +604,13 @@ final class PKB_Core
         $tag_mode = sanitize_key(wp_unslash($_GET['tag_mode'] ?? 'or'));
         $tag_mode = $tag_mode === 'and' ? 'and' : 'or';
         $sort = sanitize_key(wp_unslash($_GET['sort'] ?? 'newest'));
-        $sort = in_array($sort, ['newest', 'oldest', 'title', 'likes', 'comments'], true) ? $sort : 'newest';
+        $sort = in_array($sort, ['newest', 'oldest', 'title', 'views', 'likes', 'comments'], true) ? $sort : 'newest';
 
         $tags = get_terms([
             'taxonomy' => 'post_tag',
             'hide_empty' => true,
-            'orderby' => 'name',
-            'order' => 'ASC',
+            'orderby' => 'count',
+            'order' => 'DESC',
         ]);
 
         ob_start();
@@ -627,6 +627,7 @@ final class PKB_Core
                         <option value="newest" <?php selected($sort, 'newest'); ?>>최신순</option>
                         <option value="oldest" <?php selected($sort, 'oldest'); ?>>오래된순</option>
                         <option value="title" <?php selected($sort, 'title'); ?>>제목순</option>
+                        <option value="views" <?php selected($sort, 'views'); ?>>조회수 많은 순</option>
                         <option value="likes" <?php selected($sort, 'likes'); ?>>좋아요순</option>
                         <option value="comments" <?php selected($sort, 'comments'); ?>>댓글 많은 순</option>
                     </select>
@@ -637,7 +638,7 @@ final class PKB_Core
                         <option value="">태그 선택</option>
                         <?php if (!is_wp_error($tags)) : ?>
                             <?php foreach ($tags as $term) : ?>
-                                <option value="<?php echo esc_attr($term->slug); ?>"><?php echo esc_html($term->name); ?></option>
+                                <option value="<?php echo esc_attr($term->slug); ?>"><?php echo esc_html(sprintf('%s (%s)', $term->name, number_format_i18n((int) $term->count))); ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
@@ -667,7 +668,7 @@ final class PKB_Core
             <?php if ($query_text === '' && $selected_tags === []) : ?>
                 <p class="pkb-form-note">검색어를 입력하거나 태그를 선택해 주세요.</p>
             <?php else : ?>
-                <?php echo wp_kses_post($this->search_results_markup($query_text, $selected_tags, $tag_mode, $sort)); ?>
+                <?php echo $this->search_results_markup($query_text, $selected_tags, $tag_mode, $sort); ?>
             <?php endif; ?>
         </section>
         <?php
@@ -723,6 +724,10 @@ final class PKB_Core
             $args['order'] = 'ASC';
         } elseif ($sort === 'comments') {
             $args['orderby'] = 'comment_count';
+            $args['order'] = 'DESC';
+        } elseif ($sort === 'views') {
+            $args['pkb_sort_views'] = 1;
+            $args['orderby'] = 'date';
             $args['order'] = 'DESC';
         } elseif ($sort === 'likes') {
             $args['pkb_sort_likes'] = 1;
@@ -1954,6 +1959,8 @@ final class PKB_Core
         } elseif ($sort === 'comments') {
             $query->set('orderby', 'comment_count');
             $query->set('order', 'DESC');
+        } elseif ($sort === 'views') {
+            $query->set('pkb_sort_views', 1);
         } elseif ($sort === 'likes') {
             $query->set('pkb_sort_likes', 1);
         } else {
@@ -1964,11 +1971,23 @@ final class PKB_Core
 
     public function search_like_sort_clauses(array $clauses, WP_Query $query): array
     {
-        if (is_admin() || !$query->get('pkb_sort_likes')) {
+        if (is_admin() || (!$query->get('pkb_sort_likes') && !$query->get('pkb_sort_views'))) {
             return $clauses;
         }
 
         global $wpdb;
+
+        if ($query->get('pkb_sort_views')) {
+            $views = $wpdb->prefix . 'post_views';
+            if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $views)) !== $views) {
+                return $clauses;
+            }
+
+            $clauses['join'] .= " LEFT JOIN (SELECT id AS post_id, SUM(count) AS pkb_view_count FROM $views WHERE type = 4 AND period = 'total' GROUP BY id) pkb_views ON {$wpdb->posts}.ID = pkb_views.post_id";
+            $clauses['orderby'] = 'COALESCE(pkb_views.pkb_view_count, 0) DESC, ' . $wpdb->posts . '.post_date DESC';
+            return $clauses;
+        }
+
         $likes = self::table('post_likes');
         $clauses['join'] .= " LEFT JOIN (SELECT post_id, COUNT(*) AS pkb_like_count FROM $likes GROUP BY post_id) pkb_likes ON {$wpdb->posts}.ID = pkb_likes.post_id";
         $clauses['orderby'] = 'COALESCE(pkb_likes.pkb_like_count, 0) DESC, ' . $wpdb->posts . '.post_date DESC';
