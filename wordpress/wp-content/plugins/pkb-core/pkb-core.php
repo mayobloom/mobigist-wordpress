@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.57
+ * Version: 0.1.58
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.57');
+define('PKB_CORE_VERSION', '0.1.58');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -77,6 +77,7 @@ final class PKB_Core
         add_filter('wp_mail_from_name', [$this, 'mail_from_name']);
         add_filter('posts_clauses', [$this, 'search_like_sort_clauses'], 10, 2);
         add_filter('xmlrpc_enabled', '__return_false');
+        add_filter('pvc_display_views_count', '__return_false');
         add_action('pkb_before_user_account_delete', [$this, 'delete_user_owned_data']);
         add_filter('pkb_liked_posts_markup', [$this, 'liked_posts_markup_filter'], 10, 2);
         add_filter('pkb_user_comments_markup', [$this, 'user_comments_markup_filter'], 10, 2);
@@ -751,9 +752,11 @@ final class PKB_Core
                         <p class="pkb-search-meta">
                             <?php echo esc_html(get_the_date('M j, Y', $post)); ?>
                             <span aria-hidden="true">·</span>
-                            <?php echo $this->metric_count_markup($this->post_like_count((int) $post->ID), 'like', 'Like', 'Likes'); ?>
-                            <span aria-hidden="true">·</span>
-                            <?php echo $this->metric_count_markup((int) get_comments_number($post->ID), 'comment', 'Comment', 'Comments'); ?>
+                            <span class="pkb-meta-counts">
+                                <?php echo $this->metric_count_markup($this->post_view_count((int) $post->ID), 'view', 'View', 'Views'); ?>
+                                <?php echo $this->metric_count_markup($this->post_like_count((int) $post->ID), 'like', 'Like', 'Likes'); ?>
+                                <?php echo $this->metric_count_markup((int) get_comments_number($post->ID), 'comment', 'Comment', 'Comments'); ?>
+                            </span>
                         </p>
                         <?php echo wp_kses_post($this->search_result_terms((int) $post->ID)); ?>
                     </div>
@@ -1336,10 +1339,12 @@ final class PKB_Core
 
         $likes = $this->post_like_count($post_id);
         $comments = (int) get_comments_number($post_id);
+        $views = $this->post_view_count($post_id);
         $thumbnail = $this->post_meta_thumbnail($post_id);
         $terms = is_singular('post') ? '' : $this->post_preview_terms($post_id);
         $meta = sprintf(
-            '<span class="pkb-post-date-meta"><span aria-hidden="true">·</span> %s <span aria-hidden="true">·</span> %s%s</span>',
+            '<span class="pkb-post-date-meta"><span aria-hidden="true">·</span> <span class="pkb-meta-counts">%s%s%s</span>%s</span>',
+            $this->metric_count_markup($views, 'view', 'View', 'Views'),
             $this->metric_count_markup($likes, 'like', 'Like', 'Likes'),
             $this->metric_count_markup($comments, 'comment', 'Comment', 'Comments'),
             $thumbnail
@@ -1395,9 +1400,19 @@ final class PKB_Core
         return sprintf('%d %s', $count, $count === 1 ? $singular : $plural);
     }
 
+    private function post_view_count(int $post_id): int
+    {
+        if (function_exists('pvc_get_post_views')) {
+            return max(0, (int) pvc_get_post_views($post_id));
+        }
+
+        return 0;
+    }
+
     private function metric_count_markup(int $count, string $type, string $singular, string $plural): string
     {
         $icons = [
+            'view' => '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M3 12s3.2-5.5 9-5.5S21 12 21 12s-3.2 5.5-9 5.5S3 12 3 12Z"></path><circle cx="12" cy="12" r="2.4"></circle></svg>',
             'like' => '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M20.4 5.1c-1.5-1.6-3.9-1.6-5.4 0L12 8.2 9 5.1c-1.5-1.6-3.9-1.6-5.4 0-1.5 1.6-1.5 4.1 0 5.7L12 19l8.4-8.2c1.5-1.6 1.5-4.1 0-5.7Z"></path></svg>',
             'comment' => '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M5 5.5h14v9H9.5L5 18.5v-13Z"></path></svg>',
         ];
