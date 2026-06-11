@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_SHHH_CHILD_VERSION', '0.1.43');
+define('PKB_SHHH_CHILD_VERSION', '0.1.44');
 
 function pkb_shhh_child_is_staff_user(): bool
 {
@@ -36,6 +36,14 @@ add_action('wp_enqueue_scripts', function (): void {
         get_stylesheet_directory_uri() . '/assets/css/theme.css',
         ['pkb-local-fonts'],
         PKB_SHHH_CHILD_VERSION
+    );
+
+    wp_enqueue_script(
+        'pkb-shhh-child',
+        get_stylesheet_directory_uri() . '/assets/js/theme.js',
+        [],
+        PKB_SHHH_CHILD_VERSION,
+        true
     );
 
 }, 20);
@@ -208,6 +216,17 @@ add_action('wp_footer', function (): void {
     </script>
     <?php
 }, 100);
+
+add_action('wp_body_open', function (): void {
+    ?>
+    <button class="pkb-back-to-top" type="button" aria-label="페이지 맨 위로 이동" onclick="window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});" style="position:fixed;right:16px;bottom:18px;z-index:40;display:inline-flex;width:42px;height:42px;align-items:center;justify-content:center;">
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false" style="display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;">
+            <path d="M6 11l6-6 6 6"></path>
+            <path d="M6 18l6-6 6 6"></path>
+        </svg>
+    </button>
+    <?php
+}, 20);
 
 add_filter('render_block', function (string $block_content, array $block): string {
     if (is_admin() || ($block['blockName'] ?? '') !== 'core/paragraph') {

@@ -1,23 +1,22 @@
 (function () {
   document.addEventListener('DOMContentLoaded', function () {
-    const title = document.querySelector('.wp-block-site-title');
-    if (title && !document.querySelector('.pkb-title-about-link')) {
-      const originalSeparator = title.nextElementSibling;
-      if (originalSeparator && originalSeparator.textContent.trim() === '•') {
-        originalSeparator.classList.add('pkb-hidden-theme-separator');
-      }
-
-      const separator = document.createElement('span');
-      separator.className = 'pkb-title-separator';
-      separator.textContent = '•';
-
-      const about = document.createElement('a');
-      about.className = 'pkb-title-about-link';
-      about.href = '/category/about/';
-      about.textContent = 'About';
-
-      title.insertAdjacentElement('afterend', about);
-      title.insertAdjacentElement('afterend', separator);
+    let backToTop = document.querySelector('.pkb-back-to-top');
+    if (!backToTop) {
+      backToTop = document.createElement('button');
+      backToTop.type = 'button';
+      backToTop.className = 'pkb-back-to-top';
+      backToTop.setAttribute('aria-label', '페이지 맨 위로 이동');
+      backToTop.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M6 14l6-6 6 6"></path></svg>';
+      document.body.appendChild(backToTop);
     }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    backToTop.addEventListener('click', function () {
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion.matches ? 'auto' : 'smooth'
+      });
+    });
   });
 })();
