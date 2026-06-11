@@ -602,6 +602,12 @@ footer .pkb-site-footer-text a:focus {
   border-color: var(--pkb-accent);
 }
 
+.pkb-graph-controls button.is-active {
+  border-color: var(--pkb-accent);
+  background: rgba(47, 95, 85, 0.08);
+  color: var(--pkb-accent);
+}
+
 .pkb-autocomplete {
   position: fixed;
   z-index: 100000;

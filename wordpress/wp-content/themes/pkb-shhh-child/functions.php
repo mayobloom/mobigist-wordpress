@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_SHHH_CHILD_VERSION', '0.1.44');
+define('PKB_SHHH_CHILD_VERSION', '0.1.45');
 
 function pkb_shhh_child_is_staff_user(): bool
 {
