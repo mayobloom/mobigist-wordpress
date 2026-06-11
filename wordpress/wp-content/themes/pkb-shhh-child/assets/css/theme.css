@@ -469,6 +469,13 @@ footer .pkb-site-footer-text a:focus {
   margin-left: 0;
 }
 
+.pkb-meta-counts {
+  display: inline-flex;
+  gap: 0.66rem;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
 .pkb-meta-count {
   position: relative;
   top: 0.15em;
