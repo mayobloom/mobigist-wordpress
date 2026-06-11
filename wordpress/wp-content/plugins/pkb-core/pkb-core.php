@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.60
+ * Version: 0.1.61
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.60');
+define('PKB_CORE_VERSION', '0.1.61');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
