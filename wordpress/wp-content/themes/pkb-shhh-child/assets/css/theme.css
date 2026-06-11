@@ -469,6 +469,32 @@ footer .pkb-site-footer-text a:focus {
   margin-left: 0;
 }
 
+.pkb-meta-count {
+  position: relative;
+  top: 0.15em;
+  display: inline-flex;
+  gap: 0.18rem;
+  align-items: center;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+.pkb-meta-count svg {
+  width: 0.92em;
+  height: 0.92em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pkb-meta-count-number {
+  font-variant-numeric: tabular-nums;
+}
+
 .pkb-form-message {
   margin: 0 0 1rem;
 }
