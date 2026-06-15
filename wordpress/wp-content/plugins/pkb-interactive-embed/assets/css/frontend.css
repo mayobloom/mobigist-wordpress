@@ -1,0 +1,114 @@
+.pkb-interactive-embed {
+  --pkb-embed-height: 680px;
+  --pkb-embed-mobile-height: 540px;
+  display: block;
+  width: 100%;
+  margin: 1.6rem 0;
+}
+
+.pkb-interactive-embed__title {
+  margin: 0 0 0.45rem;
+  color: var(--wp--preset--color--contrast, #2d2a26);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.pkb-interactive-embed__frame {
+  width: 100%;
+  height: var(--pkb-embed-height);
+  overflow: hidden;
+  border: 1px solid rgba(45, 42, 38, 0.16);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.pkb-interactive-embed.has-aspect-ratio .pkb-interactive-embed__frame {
+  height: auto;
+  aspect-ratio: var(--pkb-embed-aspect-ratio);
+}
+
+.pkb-interactive-embed iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.pkb-interactive-embed__caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  align-items: baseline;
+  margin: 0.45rem 0 0;
+  color: var(--wp--preset--color--secondary, #756f68);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.pkb-interactive-embed__caption a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.pkb-interactive-embed-fallback {
+  margin: 1.2rem 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(157, 59, 59, 0.22);
+  border-radius: 4px;
+  background: rgba(157, 59, 59, 0.06);
+  color: #7c2f2f;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.pkb-interactive-embed-editor-fields {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+
+.pkb-interactive-embed-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pkb-interactive-embed-editor-help {
+  margin: 0;
+  color: #757575;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.pkb-interactive-embed-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+@media (max-width: 640px) {
+  .pkb-interactive-embed {
+    margin: 1.2rem 0;
+  }
+
+  .pkb-interactive-embed__frame {
+    height: var(--pkb-embed-mobile-height);
+  }
+
+  .pkb-interactive-embed.has-aspect-ratio .pkb-interactive-embed__frame {
+    height: auto;
+  }
+
+  .pkb-interactive-embed__caption {
+    font-size: 0.76rem;
+  }
+
+  .pkb-interactive-embed-editor-grid {
+    grid-template-columns: 1fr;
+  }
+}
