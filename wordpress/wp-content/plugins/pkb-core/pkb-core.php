@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.64
+ * Version: 0.1.65
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.64');
+define('PKB_CORE_VERSION', '0.1.65');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -20,6 +20,7 @@ final class PKB_Core
 {
     public const HEADER_CATEGORY_SHOW_META = 'pkb_show_in_header';
     public const HEADER_CATEGORY_ORDER_META = 'pkb_header_order';
+    private const CATEGORY_TREE_COUNT_TRANSIENT_PREFIX = 'pkb_cat_tree_count_';
 
     private static ?PKB_Core $instance = null;
     private ?string $category_header_order_sort = null;
@@ -45,6 +46,9 @@ final class PKB_Core
         add_action('add_meta_boxes', [$this, 'add_access_meta_box']);
         add_action('save_post', [$this, 'save_post_access'], 10, 2);
         add_action('save_post', [$this, 'index_internal_links'], 30, 2);
+        add_action('save_post_post', [self::class, 'flush_category_tree_count_cache']);
+        add_action('delete_post', [self::class, 'flush_category_tree_count_cache']);
+        add_action('set_object_terms', [self::class, 'flush_category_tree_count_cache']);
         add_action('pre_get_posts', [$this, 'filter_restricted_posts']);
         add_action('template_redirect', [$this, 'guard_single_post_access']);
         add_filter('authenticate', [$this, 'block_sanctioned_login'], 30, 3);
@@ -69,6 +73,9 @@ final class PKB_Core
         add_action('category_edit_form_fields', [$this, 'render_category_nav_edit_fields']);
         add_action('created_category', [$this, 'save_category_nav_fields']);
         add_action('edited_category', [$this, 'save_category_nav_fields']);
+        add_action('created_category', [self::class, 'flush_category_tree_count_cache']);
+        add_action('edited_category', [self::class, 'flush_category_tree_count_cache']);
+        add_action('delete_category', [self::class, 'flush_category_tree_count_cache']);
         add_filter('manage_edit-category_columns', [$this, 'add_category_nav_columns']);
         add_filter('manage_category_custom_column', [$this, 'render_category_nav_column'], 10, 3);
         add_filter('get_terms', [$this, 'sort_category_admin_terms_by_header_order'], 10, 4);
@@ -216,6 +223,60 @@ final class PKB_Core
         }
 
         update_option('pkb_header_category_meta_initialized', '1', false);
+    }
+
+    public static function category_tree_post_count(int $term_id): int
+    {
+        $term_id = absint($term_id);
+        if (!$term_id) {
+            return 0;
+        }
+
+        $cache_key = self::CATEGORY_TREE_COUNT_TRANSIENT_PREFIX . $term_id;
+        $cached = get_transient($cache_key);
+        if ($cached !== false) {
+            return absint($cached);
+        }
+
+        $term_ids = [$term_id];
+        $children = get_term_children($term_id, 'category');
+        if (!is_wp_error($children) && $children) {
+            $term_ids = array_merge($term_ids, array_map('absint', $children));
+        }
+        $term_ids = array_values(array_unique(array_filter($term_ids)));
+        if (!$term_ids) {
+            return 0;
+        }
+
+        global $wpdb;
+        $placeholders = implode(',', array_fill(0, count($term_ids), '%d'));
+        $sql = "
+            SELECT COUNT(DISTINCT p.ID)
+            FROM {$wpdb->posts} p
+            INNER JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID
+            INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+            WHERE tt.taxonomy = 'category'
+                AND tt.term_id IN ($placeholders)
+                AND p.post_type = 'post'
+                AND p.post_status = 'publish'
+        ";
+        $count = absint($wpdb->get_var($wpdb->prepare($sql, $term_ids)));
+
+        set_transient($cache_key, $count, 10 * MINUTE_IN_SECONDS);
+        return $count;
+    }
+
+    public static function flush_category_tree_count_cache(): void
+    {
+        global $wpdb;
+
+        $like = $wpdb->esc_like('_transient_' . self::CATEGORY_TREE_COUNT_TRANSIENT_PREFIX) . '%';
+        $timeout_like = $wpdb->esc_like('_transient_timeout_' . self::CATEGORY_TREE_COUNT_TRANSIENT_PREFIX) . '%';
+        $wpdb->query($wpdb->prepare(
+            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+            $like,
+            $timeout_like
+        ));
     }
 
     public function render_category_nav_add_fields(): void
@@ -2272,7 +2333,7 @@ function pkb_render_primary_nav(): void
             '<a href="%s">%s <span class="pkb-meta">(%d)</span></a>',
             esc_url(get_term_link($term)),
             esc_html($term->name),
-            (int) $term->count
+            PKB_Core::category_tree_post_count((int) $term->term_id)
         );
     }
     printf(
