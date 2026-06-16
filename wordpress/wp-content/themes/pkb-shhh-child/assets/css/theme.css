@@ -417,7 +417,7 @@ footer .pkb-site-footer-text a:focus {
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 767px) {
   body.pkb-shhh-child {
     --wp--preset--font-size--small: 0.855rem;
     --wp--preset--font-size--medium: 0.9025rem;
@@ -425,7 +425,9 @@ footer .pkb-site-footer-text a:focus {
     --wp--preset--font-size--x-large: 1.08rem;
     --wp--preset--font-size--xx-large: 1.22rem;
   }
+}
 
+@media (max-width: 560px) {
   .pkb-sticky-header-bar {
     padding-bottom: 0.85rem;
   }
@@ -443,7 +445,7 @@ footer .pkb-site-footer-text a:focus {
   }
 }
 
-@media (min-width: 561px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   body.pkb-shhh-child {
     --wp--preset--font-size--small: 0.95rem;
     --wp--preset--font-size--medium: 1rem;
@@ -663,10 +665,6 @@ footer .pkb-site-footer-text a:focus {
 @media (max-width: 1919px) {
   body.pkb-shhh-child figure.wp-block-table {
     display: block;
-    width: 100%;
-    max-width: 100%;
-    margin-right: 0;
-    margin-left: 0;
     padding-bottom: 0.35rem;
     overflow-x: auto;
     overflow-y: hidden;
@@ -696,7 +694,7 @@ footer .pkb-site-footer-text a:focus {
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
   .pkb-top-row {
     justify-content: center;
   }
