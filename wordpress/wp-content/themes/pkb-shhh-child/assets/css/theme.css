@@ -418,6 +418,14 @@ footer .pkb-site-footer-text a:focus {
 }
 
 @media (max-width: 560px) {
+  body.pkb-shhh-child {
+    --wp--preset--font-size--small: 0.855rem;
+    --wp--preset--font-size--medium: 0.9025rem;
+    --wp--preset--font-size--large: 0.95rem;
+    --wp--preset--font-size--x-large: 1.08rem;
+    --wp--preset--font-size--xx-large: 1.22rem;
+  }
+
   .pkb-sticky-header-bar {
     padding-bottom: 0.85rem;
   }
