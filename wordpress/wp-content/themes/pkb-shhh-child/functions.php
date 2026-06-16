@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_SHHH_CHILD_VERSION', '0.1.45');
+define('PKB_SHHH_CHILD_VERSION', '0.1.46');
 
 function pkb_shhh_child_is_staff_user(): bool
 {
@@ -125,7 +125,7 @@ add_shortcode('pkb_child_category_nav', function (): string {
             '<a href="%s">%s <span class="pkb-meta">(%d)</span></a>',
             esc_url(get_term_link($child)),
             esc_html($child->name),
-            (int) $child->count
+            class_exists('PKB_Core') ? PKB_Core::category_tree_post_count((int) $child->term_id) : (int) $child->count
         );
     }
     echo '</nav>';
