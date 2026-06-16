@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.65
+ * Version: 0.1.66
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -1738,6 +1738,10 @@ final class PKB_Core
     private function sync_hashtags(int $post_id, string $content): void
     {
         $clean = preg_replace('/```.*?```/s', '', $content) ?: $content;
+        $clean = preg_replace('/<pre\b[^>]*>.*?<\/pre>/is', '', $clean) ?: $clean;
+        $clean = preg_replace('/<code\b[^>]*>.*?<\/code>/is', '', $clean) ?: $clean;
+        $clean = preg_replace('/<[^>]+>/', ' ', $clean) ?: $clean;
+        $clean = wp_strip_all_tags($clean, true);
         $clean = preg_replace('/https?:\/\/\S+/i', '', $clean) ?: $clean;
         preg_match_all('/(?<![\pL\pN_])#([\pL\pN_-]{2,40})/u', $clean, $matches);
 
