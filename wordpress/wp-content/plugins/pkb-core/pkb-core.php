@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.67
+ * Version: 0.1.69
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.67');
+define('PKB_CORE_VERSION', '0.1.69');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -518,11 +518,14 @@ final class PKB_Core
     public function enqueue_frontend_assets(): void
     {
         wp_enqueue_style('pkb-core', PKB_CORE_URL . 'assets/css/pkb-core.css', [], PKB_CORE_VERSION);
+        wp_enqueue_style('pkb-katex', PKB_CORE_URL . 'assets/vendor/katex/katex.min.css', [], '0.16.22');
         wp_enqueue_script('pkb-mathjax-config', PKB_CORE_URL . 'assets/js/mathjax-config.js', [], PKB_CORE_VERSION, false);
         wp_enqueue_script('mathjax', 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js', ['pkb-mathjax-config'], '3', true);
         wp_enqueue_script('d3', 'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js', [], '7', true);
         wp_enqueue_script('pkb-graph', PKB_CORE_URL . 'assets/js/graph.js', ['d3'], PKB_CORE_VERSION, true);
-        wp_enqueue_script('pkb-frontend', PKB_CORE_URL . 'assets/js/frontend.js', ['wp-api-fetch'], PKB_CORE_VERSION, true);
+        wp_enqueue_script('pkb-html2canvas', PKB_CORE_URL . 'assets/vendor/html2canvas.min.js', [], '1.4.1', true);
+        wp_enqueue_script('pkb-katex', PKB_CORE_URL . 'assets/vendor/katex/katex.min.js', [], '0.16.22', true);
+        wp_enqueue_script('pkb-frontend', PKB_CORE_URL . 'assets/js/frontend.js', ['wp-api-fetch', 'pkb-html2canvas', 'pkb-katex'], PKB_CORE_VERSION, true);
         wp_localize_script('pkb-frontend', 'PKB', $this->script_data());
         wp_localize_script('pkb-graph', 'PKB', $this->script_data());
     }
