@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PKB Core
  * Description: Core functionality for the Personal Knowledge Blog.
- * Version: 0.1.66
+ * Version: 0.1.67
  * Author: PKB
  * Text Domain: pkb-core
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PKB_CORE_VERSION', '0.1.65');
+define('PKB_CORE_VERSION', '0.1.67');
 define('PKB_CORE_FILE', __FILE__);
 define('PKB_CORE_DIR', plugin_dir_path(__FILE__));
 define('PKB_CORE_URL', plugin_dir_url(__FILE__));
@@ -531,6 +531,13 @@ final class PKB_Core
     {
         wp_enqueue_script('pkb-mathjax-config', PKB_CORE_URL . 'assets/js/mathjax-config.js', [], PKB_CORE_VERSION, false);
         wp_enqueue_script('mathjax', 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js', ['pkb-mathjax-config'], '3', true);
+        wp_enqueue_script(
+            'pkb-core-editor',
+            PKB_CORE_URL . 'assets/js/editor.js',
+            ['wp-components', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-i18n', 'wp-plugins'],
+            PKB_CORE_VERSION,
+            true
+        );
         wp_enqueue_style('pkb-core', PKB_CORE_URL . 'assets/css/pkb-core.css', [], PKB_CORE_VERSION);
     }
 
