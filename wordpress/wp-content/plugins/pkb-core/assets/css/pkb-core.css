@@ -712,3 +712,249 @@
   font-size: 12px;
   line-height: 1.45;
 }
+
+.pkb-table-viewer-ready {
+  position: relative;
+}
+
+.pkb-table-viewer-wrap {
+  width: 100%;
+  max-width: var(--wp--style--global--content-size, min(100% - 72px, 696px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pkb-table-expand-button {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  padding: 0;
+  border: 1px solid rgba(222, 219, 212, 0.58);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.46);
+  color: #1d1d1f;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.pkb-table-viewer-ready:hover .pkb-table-expand-button,
+.pkb-table-expand-button:focus {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .pkb-table-expand-button {
+    opacity: 1;
+  }
+}
+
+.pkb-table-expand-button:hover,
+.pkb-table-expand-button:focus {
+  border-color: #2f5f55;
+  background: rgba(255, 255, 255, 0.88);
+  outline: 0;
+}
+
+.pkb-table-expand-button svg {
+  display: block;
+  width: 0.86rem;
+  height: 0.86rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pkb-table-modal-button svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.pkb-table-modal-open {
+  overflow: hidden;
+}
+
+.pkb-table-modal[hidden] {
+  display: none;
+}
+
+.pkb-table-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
+  display: block;
+}
+
+.pkb-table-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(251, 250, 247, 0.94);
+  backdrop-filter: blur(2px);
+}
+
+.pkb-table-modal-toolbar {
+  position: absolute;
+  top: max(0.75rem, env(safe-area-inset-top));
+  right: max(0.75rem, env(safe-area-inset-right));
+  z-index: 2;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.pkb-table-modal-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
+  border: 1px solid rgba(222, 219, 212, 0.95);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #1d1d1f;
+  cursor: pointer;
+}
+
+.pkb-table-modal-button:hover,
+.pkb-table-modal-button:focus {
+  border-color: #2f5f55;
+  color: #2f5f55;
+  outline: 0;
+}
+
+.pkb-table-modal-stage {
+  position: absolute;
+  inset: max(4.25rem, calc(env(safe-area-inset-top) + 3.5rem)) 0 0;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.pkb-table-modal-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.pkb-table-modal-content {
+  --pkb-table-viewer-ratio: 1;
+  --pkb-table-viewer-width: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.pkb-table-modal-loading {
+  min-width: 12rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(222, 219, 212, 0.95);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #767676;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.pkb-table-modal-canvas {
+  display: block;
+  max-width: none;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  image-rendering: auto;
+}
+
+.pkb-table-capture-host {
+  position: fixed;
+  top: 0;
+  left: -100000px;
+  z-index: -1;
+  display: block;
+  width: max-content;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pkb-table-capture-figure.wp-block-table {
+  display: block;
+  width: max-content;
+  max-width: none;
+  margin: 0 !important;
+  overflow: visible;
+  background: #fff;
+}
+
+.pkb-table-capture-figure table {
+  width: max-content !important;
+  max-width: none !important;
+  table-layout: auto !important;
+  background: #fff;
+}
+
+.pkb-table-capture-math {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.pkb-table-capture-math.is-display {
+  display: block;
+  margin: 0.15rem 0;
+  text-align: center;
+}
+
+.pkb-table-modal-figure.wp-block-table {
+  display: block;
+  width: max-content;
+  max-width: none;
+  margin: 0 !important;
+  overflow: visible;
+  box-shadow: none;
+}
+
+.pkb-table-modal-figure table {
+  width: max-content !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  table-layout: auto !important;
+  background: #fff;
+  font-size: max(6px, calc(1em * var(--pkb-table-viewer-ratio)));
+}
+
+.pkb-table-modal-figure th,
+.pkb-table-modal-figure td {
+  min-width: max(2.5rem, calc(10rem * var(--pkb-table-viewer-ratio)));
+  padding: max(0.12rem, calc(0.5em * var(--pkb-table-viewer-ratio)));
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.pkb-table-modal-content.is-fit-layout .pkb-table-modal-figure.wp-block-table {
+  width: var(--pkb-table-viewer-width) !important;
+}
+
+.pkb-table-modal-content.is-fit-layout .pkb-table-modal-figure table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+.pkb-table-modal-content.is-fit-layout .pkb-table-modal-figure th,
+.pkb-table-modal-content.is-fit-layout .pkb-table-modal-figure td {
+  min-width: 0;
+}
