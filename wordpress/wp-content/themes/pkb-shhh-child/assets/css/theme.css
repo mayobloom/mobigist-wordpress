@@ -443,6 +443,16 @@ footer .pkb-site-footer-text a:focus {
   }
 }
 
+@media (min-width: 561px) and (max-width: 1024px) {
+  body.pkb-shhh-child {
+    --wp--preset--font-size--small: 0.95rem;
+    --wp--preset--font-size--medium: 1rem;
+    --wp--preset--font-size--large: 1.12rem;
+    --wp--preset--font-size--x-large: 1.35rem;
+    --wp--preset--font-size--xx-large: 1.6rem;
+  }
+}
+
 .pkb-form,
 .pkb-account-panel,
 .pkb-search-tools {
@@ -650,6 +660,42 @@ footer .pkb-site-footer-text a:focus {
   color: #111;
 }
 
+@media (max-width: 1919px) {
+  body.pkb-shhh-child figure.wp-block-table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    padding-bottom: 0.35rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    box-shadow: inset -16px 0 14px -18px rgba(29, 29, 31, 0.55);
+  }
+
+  body.pkb-shhh-child figure.wp-block-table table {
+    width: max-content;
+    min-width: min(960px, 100%);
+    table-layout: auto !important;
+  }
+
+  body.pkb-shhh-child figure.wp-block-table th,
+  body.pkb-shhh-child figure.wp-block-table td {
+    min-width: 10rem;
+    vertical-align: top;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+}
+
+@media (max-width: 1024px) {
+  body.pkb-shhh-child figure.wp-block-table table {
+    min-width: 720px;
+  }
+}
+
 @media (max-width: 700px) {
   .pkb-top-row {
     justify-content: center;
@@ -669,24 +715,8 @@ footer .pkb-site-footer-text a:focus {
     min-height: 520px;
   }
 
-  body.pkb-shhh-child figure.wp-block-table {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    margin-right: 0;
-    margin-left: 0;
-    padding-bottom: 0.35rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    box-shadow: inset -16px 0 14px -18px rgba(29, 29, 31, 0.55);
-  }
-
   body.pkb-shhh-child figure.wp-block-table table {
-    width: max-content;
     min-width: 620px;
-    table-layout: auto !important;
   }
 
   body.pkb-shhh-child figure.wp-block-table th,
@@ -694,8 +724,5 @@ footer .pkb-site-footer-text a:focus {
     min-width: 8.25rem;
     font-size: 0.92em;
     line-height: 1.55;
-    vertical-align: top;
-    word-break: keep-all;
-    overflow-wrap: break-word;
   }
 }
